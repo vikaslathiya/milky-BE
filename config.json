@@ -1,0 +1,4 @@
+{
+    "connectionString": "mongodb://localhost/milky-app",
+    "secret": "THIS SECRET KEY IS USED FOR MILKY APP BACKEND"
+}
