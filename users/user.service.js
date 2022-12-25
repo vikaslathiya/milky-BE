@@ -21,8 +21,8 @@ module.exports = {
   delete: _delete,
 };
 
-async function authenticate({ username, password }) {
-  const user = await User.findOne({ username });
+async function authenticate({ agentCode, password }) {
+  const user = await User.findOne({ agentCode });
 
   if (user && bcryptjs.compareSync(password, user.hash)) {
     const token = jwtWebToken.sign({ sub: user.id }, config.secret, {
@@ -56,8 +56,22 @@ async function create(userParam) {
     user.hash = bcryptjs.hashSync(userParam.password, 10);
   }
 
+  // create code
+  const allUsers = await User.find();
+  const agentCode = allUsers[allUsers.length - 1]
+    ? allUsers[allUsers.length - 1].agentCode + 1
+    : 1001;
+  user.agentCode = agentCode;
+
   // save user
   await user.save();
+
+  const login = await authenticate({
+    agentCode: agentCode,
+    password: userParam.password,
+  });
+
+  return login;
 }
 
 async function update(id, userParam) {

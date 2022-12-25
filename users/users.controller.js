@@ -10,8 +10,13 @@ const login = async (req, res, next) => {
     .authenticate(req.body)
     .then((user) =>
       user
-        ? res.json(user)
-        : res.status(400).json({ message: "Username or password is incorrect" })
+        ? res.json({
+            data: user,
+            message: `${user.username} login successfully!`,
+          })
+        : res
+            .status(400)
+            .json({ message: "Agent code or password is incorrect" })
     )
     .catch((err) => next(err));
 };
@@ -19,7 +24,9 @@ const login = async (req, res, next) => {
 const signUp = async (req, res, next) => {
   userService
     .create(req.body)
-    .then(() => res.json({}))
+    .then((user) =>
+      res.json({ data: user, message: "User created successfully!" })
+    )
     .catch((err) => {
       next(err);
     });
@@ -28,7 +35,7 @@ const signUp = async (req, res, next) => {
 const getAllUsers = async (req, res, next) => {
   userService
     .getAll()
-    .then((users) => res.json(users))
+    .then(() => res.json({}))
     .catch((err) => next(err));
 };
 

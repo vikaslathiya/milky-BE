@@ -15,6 +15,16 @@ const userSchema = new Schema({
     unique: true,
     required: true,
   },
+  agentCode: {
+    type: Number,
+    unique: true,
+    required: true,
+  },
+  phone: {
+    type: Number,
+    unique: true,
+    required: true,
+  },
   hash: { type: String, required: true },
   name: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
